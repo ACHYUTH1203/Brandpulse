@@ -163,6 +163,37 @@ def root():
     return {"app": "BrandPulse API", "docs": "/docs", "health": "/health"}
 
 
+@app.post("/admin/bootstrap")
+def bootstrap():
+    import psycopg
+
+    import seed
+
+    with psycopg.connect(DATABASE_URL) as conn:
+        seed.apply_schema(conn)
+        seed.seed_data(conn)
+
+    with db_pool.connection() as conn, conn.cursor(row_factory=dict_row) as cur:
+        cur.execute("SELECT id FROM brands LIMIT 1")
+        row = cur.fetchone()
+        if not row:
+            raise HTTPException(status_code=500, detail="seed produced no brand")
+        brand_id = row["id"]
+
+    with db_pool.connection() as conn:
+        candidates = detection.run_detection(conn, brand_id)
+
+    with db_pool.connection() as conn:
+        workflow.ensure_schema(conn)
+        summary = workflow.process_all_leaks(conn)
+
+    return {
+        "status": "bootstrapped",
+        "leaks_detected": len(candidates),
+        "workflow": summary,
+    }
+
+
 @app.get("/health", response_model=HealthResponse)
 def health() -> HealthResponse:
     try:
