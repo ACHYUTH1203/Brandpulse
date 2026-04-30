@@ -1,21 +1,12 @@
 import os
-
 from datetime import datetime, timezone
-
 from typing import Callable
-
 import psycopg
-
 from dotenv import load_dotenv
-
 from psycopg.rows import dict_row
-
 import node_analyzer
-
 import node_enricher
-
 import node_recommender
-
 from state import InsightState, new_state
 
 load_dotenv()

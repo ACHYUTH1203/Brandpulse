@@ -1,31 +1,19 @@
 import json
-
 import os
-
 from datetime import datetime, timezone
-
 from typing import Optional
-
 import psycopg
-
 from dotenv import load_dotenv
-
 from langchain_core.messages import HumanMessage, SystemMessage
-
 from langchain_openai import ChatOpenAI
-
 from psycopg.rows import dict_row
-
 from pydantic import BaseModel, Field
-
 import node_enricher
-
 from state import InsightState, new_state
 
 load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
-
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 if not DATABASE_URL:

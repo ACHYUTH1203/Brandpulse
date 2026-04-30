@@ -1,0 +1,35 @@
+databases:
+  - name: brandpulse-db
+    databaseName: brandpulse
+    plan: free
+
+services:
+  - type: web
+    name: brandpulse-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: brandpulse-db
+          property: connectionString
+      - key: OPENAI_API_KEY
+        sync: false
+
+  - type: web
+    name: brandpulse-web
+    runtime: node
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "20.11.0"
+      - key: NEXT_PUBLIC_API_URL
+        value: https://brandpulse-api.onrender.com

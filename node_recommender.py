@@ -1,25 +1,14 @@
 import os
-
 from datetime import datetime, timezone
-
 from typing import Optional
-
 import psycopg
-
 from dotenv import load_dotenv
-
 from langchain_core.messages import HumanMessage, SystemMessage
-
 from langchain_openai import ChatOpenAI
-
 from psycopg.rows import dict_row
-
 from pydantic import BaseModel, Field
-
 import node_analyzer
-
 import node_enricher
-
 from state import InsightState, new_state
 
 load_dotenv()

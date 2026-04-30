@@ -1,17 +1,10 @@
 import os
-
 from datetime import datetime, timezone
-
 from typing import Any, Optional
-
 from uuid import UUID
-
 import psycopg
-
 from dotenv import load_dotenv
-
 from psycopg.rows import dict_row
-
 from state import InsightState, new_state
 
 load_dotenv()
