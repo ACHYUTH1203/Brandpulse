@@ -8,8 +8,8 @@ services:
     name: brandpulse-api
     runtime: python
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    buildCommand: poetry install --no-root
+    startCommand: poetry run uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
@@ -32,4 +32,4 @@ services:
       - key: NODE_VERSION
         value: "20.11.0"
       - key: NEXT_PUBLIC_API_URL
-        value: https://brandpulse-2ol3.onrender.com
+        value: https://brandpulse-1.onrender.com
